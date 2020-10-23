@@ -1,0 +1,10 @@
+<map id="Modules/TOF/src/TaskDigits.cxx" name="Modules/TOF/src/TaskDigits.cxx">
+<area shape="rect" id="node11" href="$QcInfoLogger_8h.html" title="QualityControl/QcInfoLogger.h" alt="" coords="796,229,995,256"/>
+<area shape="rect" id="node14" href="$TaskDigits_8h.html" title="Task to monitor quantities in TOF digits in both data and MC. " alt="" coords="1179,80,1305,107"/>
+<area shape="rect" id="node15" href="$TaskInterface_8h.html" title="QualityControl/TaskInterface.h" alt="" coords="1159,155,1359,181"/>
+<area shape="rect" id="node23" href="$Activity_8h.html" title="QualityControl/Activity.h" alt="" coords="1756,229,1920,256"/>
+<area shape="rect" id="node24" href="$ObjectsManager_8h.html" title="QualityControl/ObjectsManager.h" alt="" coords="1944,229,2159,256"/>
+<area shape="rect" id="node25" href="$MonitorObject_8h.html" title="QualityControl/MonitorObject.h" alt="" coords="1940,311,2141,338"/>
+<area shape="rect" id="node29" href="$MonitorObjectCollection_8h.html" title="QualityControl/MonitorObject\lCollection.h" alt="" coords="2235,304,2425,345"/>
+<area shape="rect" id="node32" href="$TaskConfig_8h.html" title="QualityControl/TaskConfig.h" alt="" coords="1647,311,1834,338"/>
+</map>

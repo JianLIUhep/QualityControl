@@ -1,0 +1,12 @@
+<map id="Framework/include/QualityControl/UpdatePolicyManager.h" name="Framework/include/QualityControl/UpdatePolicyManager.h">
+<area shape="rect" id="node2" href="$CheckRunner_8h.html" title="Framework/include/Quality\lControl/CheckRunner.h" alt="" coords="995,95,1173,136"/>
+<area shape="rect" id="node13" href="$UpdatePolicyManager_8cxx.html" title="Framework/src/UpdatePolicy\lManager.cxx" alt="" coords="1197,95,1387,136"/>
+<area shape="rect" id="node14" href="$testPolicyManager_8cxx.html" title="Framework/test/testPolicy\lManager.cxx" alt="" coords="1411,95,1586,136"/>
+<area shape="rect" id="node3" href="$CheckRunner_8cxx.html" title="Framework/src/CheckRunner.cxx" alt="" coords="5,191,224,218"/>
+<area shape="rect" id="node4" href="$CheckRunnerFactory_8cxx.html" title="Framework/src/CheckRunner\lFactory.cxx" alt="" coords="249,184,442,225"/>
+<area shape="rect" id="node5" href="$InfrastructureGenerator_8cxx.html" title="Framework/src/Infrastructure\lGenerator.cxx" alt="" coords="466,184,657,225"/>
+<area shape="rect" id="node6" href="$runBasic_8cxx.html" title="This is an executable showing QC Task&#39;s usage in Data Processing Layer. " alt="" coords="681,191,871,218"/>
+<area shape="rect" id="node7" href="$testCheckRunner_8cxx.html" title="Framework/test/testCheck\lRunner.cxx" alt="" coords="895,184,1073,225"/>
+<area shape="rect" id="node8" href="$testCheckWorkflow_8cxx.html" title="Framework/test/testCheck\lWorkflow.cxx" alt="" coords="1097,184,1274,225"/>
+<area shape="rect" id="node9" href="$testWorkflow_8cxx.html" title="Framework/test/testWorkflow.cxx" alt="" coords="1299,191,1517,218"/>
+</map>

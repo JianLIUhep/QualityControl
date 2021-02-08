@@ -30,7 +30,7 @@
 #include <Framework/DataSpecUtils.h>
 #include <Framework/DataDescriptorQueryBuilder.h>
 #include <Framework/ConfigParamRegistry.h>
-#include <Framework/InputRecordWalker.h>
+#include "QualityControl/FileFinish.h"
 
 // Fairlogger
 #include <fairlogger/Logger.h>
@@ -40,7 +40,6 @@
 
 #include <string>
 #include <memory>
-#include <TFile.h>
 
 using namespace std;
 
@@ -109,7 +108,6 @@ void TaskRunner::init(InitContext& iCtx)
   // setup user's task
   TaskFactory f;
   mTask.reset(f.create(mTaskConfig, mObjectsManager));
-  mTask->setMonitoring(mCollector);
 
   // init user's task
   mTask->loadCcdb(mTaskConfig.conditionUrl);
@@ -135,10 +133,14 @@ void TaskRunner::run(ProcessingContext& pCtx)
 
   if (dataReady) {
     mTask->monitorData(pCtx);
-    updateMonitoringStats(pCtx);
+    mNumberMessages++;
   }
 
-  if (timerReady) {
+//  if (timerReady) {
+  if ((dataReady && FileFinish == 1) || (FileInit == 999)) {
+   FileInit = 0;
+
+
     finishCycle(pCtx.outputs());
     if (mResetAfterPublish) {
       mTask->reset();
@@ -287,14 +289,14 @@ void TaskRunner::loadTopologyConfig()
 {
   auto taskConfigTree = getTaskConfigTree();
   auto policiesFilePath = mConfigFile->get<std::string>("dataSamplingPolicyFile", "");
-  std::shared_ptr<configuration::ConfigurationInterface> config = policiesFilePath.empty() ? mConfigFile : ConfigurationFactory::getConfiguration(policiesFilePath);
+  ConfigurationInterface* config = policiesFilePath.empty() ? mConfigFile.get() : ConfigurationFactory::getConfiguration(policiesFilePath).get(); // todo make sure that it is ok to use the internal pointer of the unique_ptr
   auto dataSourceTree = taskConfigTree.get_child("dataSource");
   auto type = dataSourceTree.get<std::string>("type");
 
   if (type == "dataSamplingPolicy") {
     auto policyName = dataSourceTree.get<std::string>("name");
     ILOG(Info, Support) << "policyName : " << policyName << ENDM;
-    mInputSpecs = DataSampling::InputSpecsForPolicy(config.get(), policyName);
+    mInputSpecs = DataSampling::InputSpecsForPolicy(config, policyName);
   } else if (type == "direct") {
     auto inputsQuery = dataSourceTree.get<std::string>("query");
     mInputSpecs = DataDescriptorQueryBuilder::parse(inputsQuery.c_str());
@@ -331,7 +333,6 @@ void TaskRunner::loadTaskConfig()
   mTaskConfig.maxNumberCycles = taskConfigTree.get<int>("maxNumberCycles", -1);
   mTaskConfig.consulUrl = mConfigFile->get<std::string>("qc.config.consul.url", "http://consul-test.cern.ch:8500");
   mTaskConfig.conditionUrl = mConfigFile->get<std::string>("qc.config.conditionDB.url", "http://ccdb-test.cern.ch:8080");
-  mTaskConfig.saveToFile = taskConfigTree.get<std::string>("saveObjectsToFile", "");
   try {
     mTaskConfig.customParameters = mConfigFile->getRecursiveMap("qc.tasks." + mTaskConfig.taskName + ".taskParameters");
   } catch (...) {
@@ -344,7 +345,6 @@ void TaskRunner::loadTaskConfig()
   ILOG(Info, Support) << ">> Detector name : " << mTaskConfig.detectorName << ENDM;
   ILOG(Info, Support) << ">> Cycle duration seconds : " << mTaskConfig.cycleDurationSeconds << ENDM;
   ILOG(Info, Support) << ">> Max number cycles : " << mTaskConfig.maxNumberCycles << ENDM;
-  ILOG(Info, Support) << ">> Save to file : " << mTaskConfig.saveToFile << ENDM;
 }
 
 std::string TaskRunner::validateDetectorName(std::string name) const
@@ -401,9 +401,8 @@ void TaskRunner::startCycle()
 {
   QcInfoLogger::GetInstance() << "cycle " << mCycleNumber << " in " << mTaskConfig.taskName << ENDM;
   mTask->startOfCycle();
-  mNumberMessagesReceivedInCycle = 0;
+  mNumberMessages = 0;
   mNumberObjectsPublishedInCycle = 0;
-  mDataReceivedInCycle = 0;
   mTimerDurationCycle.reset();
   mCycleOn = true;
 }
@@ -414,7 +413,6 @@ void TaskRunner::finishCycle(DataAllocator& outputs)
 
   mNumberObjectsPublishedInCycle += publish(outputs);
   mTotalNumberObjectsPublished += mNumberObjectsPublishedInCycle;
-  saveToFile();
 
   publishCycleStats();
   mObjectsManager->updateServiceDiscovery();
@@ -428,34 +426,16 @@ void TaskRunner::finishCycle(DataAllocator& outputs)
   }
 }
 
-void TaskRunner::updateMonitoringStats(ProcessingContext& pCtx)
-{
-  mNumberMessagesReceivedInCycle++;
-  for (const auto& input : InputRecordWalker(pCtx.inputs())) {
-    const auto* inputHeader = header::get<header::DataHeader*>(input.header);
-    if (inputHeader == nullptr) {
-      ILOG(Warning, Devel) << "No DataHeader found in message, ignoring this one for the statistics." << ENDM;
-      continue;
-    }
-    mDataReceivedInCycle += inputHeader->headerSize + inputHeader->payloadSize;
-  }
-}
-
 void TaskRunner::publishCycleStats()
 {
   double cycleDuration = mTimerDurationCycle.getTime();
   double rate = mNumberObjectsPublishedInCycle / (cycleDuration + mLastPublicationDuration);
-  double rateMessagesReceived = mNumberMessagesReceivedInCycle / (cycleDuration + mLastPublicationDuration);
-  double rateDataReceived = mDataReceivedInCycle / (cycleDuration + mLastPublicationDuration);
   double wholeRunRate = mTotalNumberObjectsPublished / mTimerTotalDurationActivity.getTime();
   double totalDurationActivity = mTimerTotalDurationActivity.getTime();
 
-  mCollector->send(Metric{ "qc_data_received" }
-                     .addValue(mNumberMessagesReceivedInCycle, "messages_in_cycle")
-                     .addValue(rateMessagesReceived, "messages_per_second")
-                     .addValue(mDataReceivedInCycle, "data_in_cycle")
-                     .addValue(rateDataReceived, "data_per_second"));
+  mCollector->send({ mNumberMessages, "qc_messages_received_in_cycle" });
 
+  // monitoring metrics
   mCollector->send(Metric{ "qc_duration" }
                      .addValue(cycleDuration, "module_cycle")
                      .addValue(mLastPublicationDuration, "publication")
@@ -488,18 +468,6 @@ int TaskRunner::publish(DataAllocator& outputs)
 
   mLastPublicationDuration = publicationDurationTimer.getTime();
   return objectsPublished;
-}
-
-void TaskRunner::saveToFile()
-{
-  if (!mTaskConfig.saveToFile.empty()) {
-    ILOG(Debug, Support) << "Save data to file " << mTaskConfig.saveToFile << ENDM;
-    TFile f(mTaskConfig.saveToFile.c_str(), "RECREATE");
-    for (size_t i = 0; i < mObjectsManager->getNumberPublishedObjects(); i++) {
-      mObjectsManager->getMonitorObject(i)->getObject()->Write();
-    }
-    f.Close();
-  }
 }
 
 } // namespace o2::quality_control::core

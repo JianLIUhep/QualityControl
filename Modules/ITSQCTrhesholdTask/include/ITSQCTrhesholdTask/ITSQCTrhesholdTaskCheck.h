@@ -10,29 +10,31 @@
 {
 */
 //TPaveText* warning = new TPaveText(0.3, 0.2, 0.7, 0.45, "NDC");
-namespace o2 {
-namespace quality_control_modules {
-namespace itsqctrhesholdtask {
+namespace o2
+{
+namespace quality_control_modules
+{
+namespace itsqctrhesholdtask
+{
 //TPaveText* warning = new TPaveText(0.3, 0.2, 0.7, 0.45, "NDC");
 class ITSQCTrhesholdTaskCheck : public o2::quality_control::checker::CheckInterface
 {
-	public:
-		ITSQCTrhesholdTaskCheck() = default;
-		~ITSQCTrhesholdTaskCheck() override = default;
+ public:
+  ITSQCTrhesholdTaskCheck() = default;
+  ~ITSQCTrhesholdTaskCheck() override = default;
 
-		void configure(std::string name) override;
-		Quality check(std::map<std::string, std::shared_ptr<MonitorObject>>* moMap) override;
-		void beautify(std::shared_ptr<MonitorObject> mo, Quality checkResult = Quality::Null) override;
-		std::string getAcceptedType() override;
-		TPaveText* warning = new TPaveText(0.3, 0.2, 0.7, 0.45, "NDC");
-	private:
-		
+  void configure(std::string name) override;
+  Quality check(std::map<std::string, std::shared_ptr<MonitorObject>>* moMap) override;
+  void beautify(std::shared_ptr<MonitorObject> mo, Quality checkResult = Quality::Null) override;
+  std::string getAcceptedType() override;
+  TPaveText* warning = new TPaveText(0.3, 0.2, 0.7, 0.45, "NDC");
 
-	ClassDefOverride(ITSQCTrhesholdTaskCheck, 1);
+ private:
+  ClassDefOverride(ITSQCTrhesholdTaskCheck, 1);
 };
 
-}
-}
-}
+} // namespace itsqctrhesholdtask
+} // namespace quality_control_modules
+} // namespace o2
 
 #endif

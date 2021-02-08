@@ -136,10 +136,9 @@ void TaskRunner::run(ProcessingContext& pCtx)
     mNumberMessages++;
   }
 
-//  if (timerReady) {
+  //  if (timerReady) {
   if ((dataReady && FileFinish == 1) || (FileInit == 999)) {
-   FileInit = 0;
-
+    FileInit = 0;
 
     finishCycle(pCtx.outputs());
     if (mResetAfterPublish) {

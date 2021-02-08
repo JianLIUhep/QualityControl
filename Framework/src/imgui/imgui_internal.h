@@ -107,7 +107,7 @@ extern IMGUI_API ImGuiContext* GImGui; // Current implicit ImGui context pointer
 #endif
 #define IM_STATIC_ASSERT(_COND) typedef char static_assertion_##__line__[(_COND) ? 1 : -1]
 #define IM_F32_TO_INT8_UNBOUND(_VAL) \
-  ((int)((_VAL)*255.0f + ((_VAL) >= 0 ? 0.5f : -0.5f)))                    // Unsaturated, for display purpose
+  ((int)((_VAL)*255.0f + ((_VAL) >= 0 ? 0.5f : -0.5f))) // Unsaturated, for display purpose
 #define IM_F32_TO_INT8_SAT(_VAL) ((int)(ImSaturate(_VAL) * 255.0f + 0.5f)) // Saturated, always output 0..255
 
 // Enforce cdecl calling convention for functions called by the standard library, in case compilation settings changed
@@ -271,7 +271,8 @@ static inline T ImMax(T lhs, T rhs)
 template <typename T>
 static inline T ImClamp(T v, T mn, T mx)
 {
-  return (v < mn) ? mn : (v > mx) ? mx : v;
+  return (v < mn) ? mn : (v > mx) ? mx
+                                  : v;
 }
 template <typename T>
 static inline T ImLerp(T a, T b, float t)
@@ -296,7 +297,10 @@ static inline ImVec2 ImMax(const ImVec2& lhs, const ImVec2& rhs)
 }
 static inline ImVec2 ImClamp(const ImVec2& v, const ImVec2& mn, ImVec2 mx)
 {
-  return ImVec2((v.x < mn.x) ? mn.x : (v.x > mx.x) ? mx.x : v.x, (v.y < mn.y) ? mn.y : (v.y > mx.y) ? mx.y : v.y);
+  return ImVec2((v.x < mn.x) ? mn.x : (v.x > mx.x) ? mx.x
+                                                   : v.x,
+                (v.y < mn.y) ? mn.y : (v.y > mx.y) ? mx.y
+                                                   : v.y);
 }
 static inline ImVec2 ImLerp(const ImVec2& a, const ImVec2& b, float t)
 {
@@ -310,7 +314,8 @@ static inline ImVec4 ImLerp(const ImVec4& a, const ImVec4& b, float t)
 {
   return ImVec4(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.z + (b.z - a.z) * t, a.w + (b.w - a.w) * t);
 }
-static inline float ImSaturate(float f) { return (f < 0.0f) ? 0.0f : (f > 1.0f) ? 1.0f : f; }
+static inline float ImSaturate(float f) { return (f < 0.0f) ? 0.0f : (f > 1.0f) ? 1.0f
+                                                                                : f; }
 static inline float ImLengthSqr(const ImVec2& lhs) { return lhs.x * lhs.x + lhs.y * lhs.y; }
 static inline float ImLengthSqr(const ImVec4& lhs)
 {

@@ -147,9 +147,11 @@ void TrendingTaskITSFhr::storePlots(repository::DatabaseInterface& qcdb)
       countplots = 0;
       ilay++;
     }
-    int colidx = countplots > 13 ? countplots - 14
-                                 : countplots > 6 ? countplots - 7 : countplots;
-    int mkridx = countplots > 13 ? 2 : countplots > 6 ? 1 : 0;
+    int colidx = countplots > 13  ? countplots - 14
+                 : countplots > 6 ? countplots - 7
+                                  : countplots;
+    int mkridx = countplots > 13 ? 2 : countplots > 6 ? 1
+                                                      : 0;
     int index = 0;
     if (plot.name.find("occ") != std::string::npos)
       index = 3;
@@ -204,9 +206,11 @@ void TrendingTaskITSFhr::storePlots(repository::DatabaseInterface& qcdb)
       countplots = 0;
       ilay++;
     }
-    int colidx = countplots > 13 ? countplots - 14
-                                 : countplots > 6 ? countplots - 7 : countplots;
-    int mkridx = countplots > 13 ? 2 : countplots > 6 ? 1 : 0;
+    int colidx = countplots > 13  ? countplots - 14
+                 : countplots > 6 ? countplots - 7
+                                  : countplots;
+    int mkridx = countplots > 13 ? 2 : countplots > 6 ? 1
+                                                      : 0;
     int index = 0;
     if (plot.name.find("occ") != std::string::npos)
       index = 3;
@@ -310,8 +314,10 @@ void TrendingTaskITSFhr::SetGraphNameAndAxes(TGraph* g, std::string name,
 void TrendingTaskITSFhr::PrepareLegend(TLegend* leg, int layer)
 {
   for (int istv = 0; istv < nStaves[layer]; istv++) {
-    int colidx = istv > 13 ? istv - 14 : istv > 6 ? istv - 7 : istv;
-    int mkridx = istv > 13 ? 2 : istv > 6 ? 1 : 0;
+    int colidx = istv > 13 ? istv - 14 : istv > 6 ? istv - 7
+                                                  : istv;
+    int mkridx = istv > 13 ? 2 : istv > 6 ? 1
+                                          : 0;
     TGraph* gr = new TGraph(); // dummy histo
     SetGraphStyle(gr, col[colidx], mkr[mkridx]);
     leg->AddEntry(gr, Form("%02d", istv), "pl");

@@ -4,15 +4,15 @@
 #pragma link off all functions;
 
 // Tasks
-#pragma link C++ class o2::quality_control_modules::tof::TaskDigits+;
-#pragma link C++ class o2::quality_control_modules::tof::TaskRaw+;
+#pragma link C++ class o2::quality_control_modules::tof::TaskDigits + ;
+#pragma link C++ class o2::quality_control_modules::tof::TaskRaw + ;
 // Checks
-#pragma link C++ class o2::quality_control_modules::tof::CheckDiagnostics+;
-#pragma link C++ class o2::quality_control_modules::tof::CheckCompressedData+;
-#pragma link C++ class o2::quality_control_modules::tof::CheckRawMultiplicity+;
-#pragma link C++ class o2::quality_control_modules::tof::CheckRawTime+;
-#pragma link C++ class o2::quality_control_modules::tof::CheckRawToT+;
+#pragma link C++ class o2::quality_control_modules::tof::CheckDiagnostics + ;
+#pragma link C++ class o2::quality_control_modules::tof::CheckCompressedData + ;
+#pragma link C++ class o2::quality_control_modules::tof::CheckRawMultiplicity + ;
+#pragma link C++ class o2::quality_control_modules::tof::CheckRawTime + ;
+#pragma link C++ class o2::quality_control_modules::tof::CheckRawToT + ;
 // PostProcessing
-#pragma link C++ class o2::quality_control_modules::tof::PostProcessDiagnosticPerCrate+;
+#pragma link C++ class o2::quality_control_modules::tof::PostProcessDiagnosticPerCrate + ;
 // Utilities
 #endif

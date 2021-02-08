@@ -795,7 +795,7 @@ enum { STBTT_vmove = 1,
        STBTT_vcubic };
 #endif
 
-#ifndef stbtt_vertex            // you can predefine this to use different values \
+#ifndef stbtt_vertex // you can predefine this to use different values \
                                 // (we share this with other code at RAD)
 #define stbtt_vertex_type short // can't use stbtt_int16 because that's not visible in the header file
 typedef struct {
@@ -2820,7 +2820,8 @@ static void* stbtt__hheap_alloc(stbtt__hheap* hh, size_t size, void* userdata)
     return p;
   } else {
     if (hh->num_remaining_in_head_chunk == 0) {
-      int count = (size < 32 ? 2000 : size < 128 ? 800 : 100);
+      int count = (size < 32 ? 2000 : size < 128 ? 800
+                                                 : 100);
       stbtt__hheap_chunk* c = (stbtt__hheap_chunk*)STBTT_malloc(sizeof(stbtt__hheap_chunk) + size * count, userdata);
       if (c == NULL)
         return NULL;

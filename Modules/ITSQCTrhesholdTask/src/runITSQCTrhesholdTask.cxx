@@ -88,7 +88,7 @@ WorkflowSpec defineDataProcessing(const ConfigContext& config)
 
   o2::base::GeometryManager::loadGeometry();
 
-  QcInfoLogger::GetInstance() << "******************START READER pid "<< getpid() << AliceO2::InfoLogger::InfoLogger::endm;
+  QcInfoLogger::GetInstance() << "******************START READER pid " << getpid() << AliceO2::InfoLogger::InfoLogger::endm;
 
   specs.emplace_back(o2::its::getTestDataReaderSpec());
 
@@ -111,9 +111,9 @@ std::string getConfigPath(const ConfigContext& config)
   // Determine the default config file path and name (based on option no-data-sampling and the QC_ROOT path)
   bool noDS = config.options().get<bool>("no-data-sampling");
   //std::string filename = !noDS ? "ITSQCTrhesholdTask_default.json" : "ITSQCTrhesholdTask_noSampler.json";
- std::string filename = !noDS ? "ITSQCTrhesholdTask.json" : "ITSQCTrhesholdTask_noSampler.json";
-  
-std::string defaultConfigPath = getenv("QUALITYCONTROL_ROOT") != nullptr ? std::string(getenv("QUALITYCONTROL_ROOT")) + "/etc/" + filename : "$QUALITYCONTROL_ROOT undefined";
+  std::string filename = !noDS ? "ITSQCTrhesholdTask.json" : "ITSQCTrhesholdTask_noSampler.json";
+
+  std::string defaultConfigPath = getenv("QUALITYCONTROL_ROOT") != nullptr ? std::string(getenv("QUALITYCONTROL_ROOT")) + "/etc/" + filename : "$QUALITYCONTROL_ROOT undefined";
   // The the optional one by the user
   auto userConfigPath = config.options().get<std::string>("config-path");
   // Finally build the config path based on the default or the user-base one

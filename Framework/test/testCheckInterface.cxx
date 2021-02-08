@@ -47,7 +47,7 @@ class TestCheck : public checker::CheckInterface
   {
     mValidString = name;
   }
-  
+
   Quality check(std::map<std::string, std::shared_ptr<MonitorObject>>* moMap) override
   {
     auto mo = moMap->begin()->second;
